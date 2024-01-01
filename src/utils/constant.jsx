@@ -1,5 +1,11 @@
 import { FaPlay, FaForwardStep, FaPause, FaRotate } from "react-icons/fa6";
-import { quickSort, mergeSort, bubbleSort, insertionSort } from "./algorithms";
+import {
+  quickSort,
+  mergeSort,
+  bubbleSort,
+  insertionSort,
+  selectionSort,
+} from "./algorithms";
 
 export const colors = {
   RED: "red",
@@ -34,6 +40,7 @@ export const algorithmType = {
   BUBBLE_SORT: "bubble-sort",
   INSERTION_SORT: "insertion-sort",
   QUICK_SORT: "quick-sort",
+  SELECTION_SORT: "selection-sort",
 };
 
 export const algorithms = [
@@ -45,6 +52,7 @@ export const algorithms = [
     name: "Insertion sort",
     fn: insertionSort,
   },
+  { key: algorithmType.SELECTION_SORT, name: "Select sort", fn: selectionSort },
 ];
 
 export const actionType = {
