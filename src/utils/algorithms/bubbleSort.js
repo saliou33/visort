@@ -5,24 +5,22 @@ export const bubbleSort = (arr) => {
 
   for (let i = 0; i < arr.length; i++) {
     for (let j = 0; j < arr.length - i - 1; j++) {
-      // compare
+      // animate 1
       animations.push({ position: [j, j + 1], color: colors.RED });
 
       if (arr[j] > arr[j + 1]) {
-        // swap
+        // animate swap
         animations.push({
           position: [j, j + 1],
           value: [arr[j + 1], arr[j]],
           color: colors.YELLOW,
         });
 
-        let temp = arr[j];
-        arr[j] = arr[j + 1];
-        arr[j + 1] = temp;
+        [arr[i], arr[j + 1]] = [arr[j + 1], arr[j]];
       }
     }
 
-    // fix
+    // animate
     animations.push({
       position: [arr.length - i - 1],
       color: colors.BLUE,
