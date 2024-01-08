@@ -1,12 +1,28 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import Slider from "../Slider/Slider";
 import { FaCodeCompare } from "react-icons/fa6";
 import Context from "../../context/Context";
 import { animationType } from "../../utils/constant";
 
 const Params = () => {
-  const [toggled, setToggled] = useState(false);
   const { dispatchAnimationInfos, animationInfos } = useContext(Context);
+
+  const [toggled, setToggled] = useState(false);
+
+  const ref = useRef(null);
+
+  const handleClickOutside = (e) => {
+    if (ref.current && !ref.current.contains(e.target)) {
+      setToggled(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const paramsList = [
     {
@@ -47,7 +63,7 @@ const Params = () => {
       </button>
 
       {toggled && (
-        <div className="w-[12rem] absolute bg-gray-400 p-3 rounded-xl -left-[125%] top-[110%] border border-slate-200 shadow-sm">
+        <div className="w-[12rem] absolute bg-slate-100 text-gray-700 shadow-md p-3 rounded-xl -left-[125%] top-[110%] border border-slate-200 ">
           {paramsList.map((param) => (
             <Slider key={param.key} {...param} />
           ))}

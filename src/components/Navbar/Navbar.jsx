@@ -6,7 +6,6 @@ const Navbar = () => {
     <div className="flex justify-between bg-gray-800 p-3">
       {/* actions list */}
       <ActionList />
-
       {/* algos list */}
       <AlgoList />
     </div>

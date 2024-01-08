@@ -1,10 +1,25 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { actionType, algorithms } from "../../utils/constant";
 import { FaBarsStaggered, FaXmark } from "react-icons/fa6";
 import Context from "../../context/Context";
 
 const AlgoList = () => {
   const [toggled, setToggled] = useState(false);
+
+  const ref = useRef(null);
+
+  const handleClickOutside = (e) => {
+    if (ref.current && !ref.current.contains(e.target)) {
+      setToggled(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const { dispatchActionInfos, actionInfos } = useContext(Context);
 
@@ -24,7 +39,10 @@ const AlgoList = () => {
         <FaBarsStaggered className="text-gray-100 text-[1.5rem]" />
       </button>
       {toggled && (
-        <div className="absolute right-0 top-0 h-screen bg-gray-100 px-2 max-w-[20rem] w-full ">
+        <div
+          className="absolute right-0 top-0 h-screen bg-gray-100 px-2 max-w-[20rem] w-full "
+          ref={ref}
+        >
           <div className="flex justify-between mb-5">
             <h1>Algorithms</h1>
             <button onClick={() => setToggled(false)}>

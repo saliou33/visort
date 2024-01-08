@@ -57,7 +57,7 @@ export const algorithms = [
 
 export const actionType = {
   START: "start",
-  Pause: "pause",
+  PAUSE: "pause",
   RESET: "reset",
   RESUME: "resume",
   SELECT_ACTION: "select-action",
