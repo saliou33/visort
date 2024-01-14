@@ -1,4 +1,4 @@
-import { FaPlay, FaForwardStep, FaPause, FaRotate } from "react-icons/fa6";
+import { FaPlay, FaPause, FaRotate } from "react-icons/fa6";
 import {
   quickSort,
   mergeSort,
@@ -59,7 +59,6 @@ export const actionType = {
   START: "start",
   PAUSE: "pause",
   RESET: "reset",
-  RESUME: "resume",
   SELECT_ACTION: "select-action",
   SELECT_ALGO: "select-algo",
 };
@@ -77,11 +76,6 @@ export const actions = [
     icon: FaPause,
     color: colors.RED,
   },
-  {
-    key: actionType.RESUME,
-    name: "Resume",
-    icon: FaForwardStep,
-    color: colors.BLUE,
-  },
+
   { key: actionType.RESET, name: "Reset", icon: FaRotate },
 ];

@@ -16,7 +16,7 @@ export const bubbleSort = (arr) => {
           color: colors.YELLOW,
         });
 
-        [arr[i], arr[j + 1]] = [arr[j + 1], arr[j]];
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
       }
     }
 

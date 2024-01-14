@@ -1,14 +1,10 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
+import Context from "../../context/Context";
 import { actionType, actions } from "../../utils/constant";
 import Params from "../Params/Params";
-import Context from "../../context/Context";
 
 const ActionList = () => {
   const { dispatchActionInfos, actionInfos } = useContext(Context);
-
-  useEffect(() => {
-    console.log(actionInfos);
-  });
 
   const handleActionClick = (action) => {
     dispatchActionInfos({

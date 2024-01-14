@@ -39,7 +39,7 @@ const Visualizer = () => {
   };
 
   // resume animation
-  const resumeAnimation = () => {
+  const runAnimation = () => {
     dispatchAnimationInfos({ type: animationType.RUN });
   };
 
@@ -58,7 +58,7 @@ const Visualizer = () => {
   }, []);
 
   // fn that is used to animate using an animation array
-  const runAnimation = (fn) => {
+  const playAnimation = (fn) => {
     let { array } = animationInfos;
     const animations = fn(array.map(({ value }) => value));
     animations.push({ position: array.map((v, i) => i), color: colors.GREEN });
@@ -104,6 +104,7 @@ const Visualizer = () => {
 
       let action = actionInfos?.selectedAction;
       let algo = actionInfos?.selectedAlgo;
+      let animations = animationInfos?.animationArray;
 
       if (!action) return;
 
@@ -114,9 +115,12 @@ const Visualizer = () => {
 
         // on click start
         case actionType.START:
+          if (animations && animations?.length > 0) {
+            return runAnimation();
+          }
+
           try {
-            // run the animation
-            runAnimation(algo?.fn);
+            playAnimation(algo?.fn);
           } catch (e) {
             alertBadSelection();
           }
@@ -124,11 +128,6 @@ const Visualizer = () => {
         // on click pause
         case actionType.PAUSE:
           stopAnimation();
-          break;
-
-        // on click
-        case actionType.RESUME:
-          resumeAnimation();
           break;
 
         default:
