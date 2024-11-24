@@ -7,6 +7,7 @@ export const initialAnimationInfos = {
   animationCursor: 0,
   isRunning: false,
   speed: 20,
+  soundEnabled: true,
 
   // array params
   array: [],
@@ -90,12 +91,11 @@ export const animationInfosReducer = (animationInfos, action) => {
       };
 
     // update speed
-    case animationType.SPEED: {
+    case animationType.SPEED:
       return {
         ...animationInfos,
         speed: action.payload.speed,
       };
-    }
 
     // set the animation arrays
     case animationType.START:
@@ -126,6 +126,12 @@ export const animationInfosReducer = (animationInfos, action) => {
         ...animationInfos,
         animationCursor,
         lastAnimation: action.payload,
+      };
+
+    case animationType.SET_SOUND:
+      return {
+        ...animationInfos,
+        soundEnabled: action.payload.soundEnabled,
       };
 
     default:

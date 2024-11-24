@@ -17,7 +17,7 @@ const ActionList = () => {
     <div className="flex gap-2">
       {actions.map((action, idx) => (
         <button
-          className={`flex items-center justify-center w-12 h-12 rounded-full ${
+          className={`flex items-center justify-center w-12 h-12 rounded-full text-xl text-gray-700 ${
             actionInfos?.selectedAction == action
               ? "bg-gray-500"
               : "bg-gray-100"

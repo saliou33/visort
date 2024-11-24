@@ -10,6 +10,30 @@ import {
 import Context from "../../context/Context";
 import { actionType, animationType, colors } from "../../utils/constant";
 
+// Create AudioContext lazily
+let audioContext = null;
+
+// Function to create beep sound
+const createBeep = (frequency = 440, duration = 0.1, volume = 0.1) => {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  
+  oscillator.type = 'sine';
+  oscillator.frequency.value = frequency;
+  gainNode.gain.value = volume;
+  
+  oscillator.start();
+  gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + duration);
+  oscillator.stop(audioContext.currentTime + duration);
+};
+
 const Visualizer = () => {
   const { dispatchAnimationInfos, actionInfos, animationInfos } =
     useContext(Context);
@@ -67,21 +91,36 @@ const Visualizer = () => {
 
   // useEffect for running animation
   useEffect(() => {
-    let { animationCursor, speed, animationArray, isRunning } = animationInfos;
+    let { animationCursor, speed, animationArray, isRunning, soundEnabled } = animationInfos;
 
     if (
       isRunning &&
       animationArray &&
       animationCursor < animationArray.length
     ) {
-      let { position, value, color, clear } = animationArray[animationCursor];
+      let { position, value, color } = animationArray[animationCursor];
+      
+      // Play sounds only if enabled
+      if (soundEnabled) {
+        if (color === colors.RED) {
+          // Comparison sound
+          createBeep(440, 0.05, 0.1); // Higher pitch for comparison
+        } else if (color === colors.YELLOW) {
+          // Swap sound
+          createBeep(330, 0.05, 0.1); // Lower pitch for swap
+        } else if (color === colors.GREEN) {
+          // Sorted sound
+          createBeep(660, 0.1, 0.1); // Highest pitch for sorted elements
+        }
+      }
+
       dispatchAnimationInfos({
         type: animationType.ANIMATE,
         payload: {
           position: position || [],
           value: value || [],
           color: color || "",
-          clear: clear === undefined ? true : false,
+          clear: true,
           animationCursor: animationCursor + 1,
         },
       });
@@ -99,7 +138,7 @@ const Visualizer = () => {
   useEffect(() => {
     const handleActionChange = (actionInfos) => {
       const alertBadSelection = () => {
-        alert("Algorithm not selected or not supported");
+        alert("Please select a sorting algorithm first");
       };
 
       let action = actionInfos?.selectedAction;
@@ -109,24 +148,28 @@ const Visualizer = () => {
       if (!action) return;
 
       switch (action?.key) {
-        // on click reset
-        case actionType.RESET:
-          return resetArray();
+        case "reset":
+          resetArray();
+          break;
 
-        // on click start
-        case actionType.START:
-          if (animations && animations?.length > 0) {
-            return runAnimation();
-          }
-
-          try {
-            playAnimation(algo?.fn);
-          } catch (e) {
+        case "start":
+          if (!algo) {
             alertBadSelection();
+            return;
           }
-          return;
-        // on click pause
-        case actionType.PAUSE:
+          if (animations && animations.length > 0) {
+            runAnimation();
+          } else {
+            try {
+              playAnimation(algo.fn);
+            } catch (e) {
+              console.error("Error running algorithm:", e);
+              alertBadSelection();
+            }
+          }
+          break;
+
+        case "pause":
           stopAnimation();
           break;
 
